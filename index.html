@@ -2,140 +2,155 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>車検証QR Reader β</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://unpkg.com/html5-qrcode"></script>
+<title>CarQR β v0.1</title>
 
 <style>
+*{
+    box-sizing:border-box;
+}
 
 body{
-font-family:sans-serif;
-background:#f5f5f5;
-margin:0;
-padding:20px;
+    margin:0;
+    padding:20px;
+    font-family:Arial, sans-serif;
+    background:#f5f5f5;
 }
 
 .container{
-max-width:700px;
-margin:auto;
-background:white;
-padding:20px;
-border-radius:15px;
-box-shadow:0 0 10px rgba(0,0,0,.15);
+    max-width:700px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 h1{
-text-align:center;
-color:#1565c0;
+    text-align:center;
+    color:#1565C0;
+    margin-bottom:10px;
+}
+
+p{
+    text-align:center;
+    color:#666;
+}
+
+label{
+    display:block;
+    margin-top:20px;
+    font-weight:bold;
+}
+
+select,
+input[type=file]{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    border:1px solid #ccc;
+    border-radius:8px;
 }
 
 button{
-width:100%;
-padding:15px;
-margin:10px 0;
-font-size:18px;
-background:#1976d2;
-color:white;
-border:none;
-border-radius:10px;
-cursor:pointer;
+    width:100%;
+    margin-top:20px;
+    padding:15px;
+    font-size:16px;
+    background:#1976D2;
+    color:white;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
 }
 
 button:hover{
-background:#0d47a1;
+    background:#0D47A1;
 }
 
-#reader{
-width:100%;
-margin-top:20px;
+#preview{
+    margin-top:25px;
+    text-align:center;
 }
 
-textarea{
-width:100%;
-height:250px;
-margin-top:20px;
-font-size:14px;
-padding:10px;
+#preview img{
+    max-width:100%;
+    border-radius:10px;
+    display:none;
+    border:1px solid #ddd;
 }
 
+#status{
+    margin-top:20px;
+    padding:15px;
+    background:#eef5ff;
+    border-radius:10px;
+    text-align:center;
+}
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>📷 車検証QR Reader β</h1>
+<h1>🚗 CarQR β v0.1</h1>
 
-<button onclick="startCamera()">
-カメラで読み取る
+<p>画像表示テスト版</p>
+
+<label>書類の種類</label>
+
+<select id="documentType">
+    <option>車検証</option>
+    <option>登録識別情報等通知書</option>
+    <option>予備検査証（準備中）</option>
+</select>
+
+<label>画像を選択</label>
+
+<input type="file" id="imageInput" accept="image/*">
+
+<button onclick="showImage()">
+画像を表示する
 </button>
 
-<input type="file" id="imageFile" accept="image/*">
+<div id="status">
+画像を選択してください。
+</div>
 
-<div id="reader"></div>
-
-<textarea id="result" placeholder="QRコードの内容が表示されます"></textarea>
-
-<button onclick="copyResult()">
-コピー
-</button>
+<div id="preview">
+    <img id="imagePreview">
+</div>
 
 </div>
 
 <script>
 
-let qr;
+function showImage(){
 
-function startCamera(){
+    const input = document.getElementById("imageInput");
+    const file = input.files[0];
 
-qr = new Html5Qrcode("reader");
+    if(!file){
+        alert("画像を選択してください。");
+        return;
+    }
 
-qr.start(
-{ facingMode:"environment" },
-{
-fps:10,
-qrbox:250
-},
-onScanSuccess
-);
+    const reader = new FileReader();
 
-}
+    reader.onload = function(e){
 
-function onScanSuccess(decodedText){
+        document.getElementById("imagePreview").src = e.target.result;
+        document.getElementById("imagePreview").style.display="block";
 
-document.getElementById("result").value=decodedText;
+        document.getElementById("status").innerHTML =
+        "✅ 画像を読み込みました。<br>次のバージョンでQRコード解析を追加します。";
 
-qr.stop();
+    }
 
-}
-
-document.getElementById("imageFile").addEventListener("change",function(e){
-
-const file=e.target.files[0];
-
-if(!file)return;
-
-const html5QrCode=new Html5Qrcode("reader");
-
-html5QrCode.scanFile(file,true)
-.then(decodedText=>{
-document.getElementById("result").value=decodedText;
-})
-.catch(err=>{
-alert("QRコードを読み取れませんでした");
-});
-
-});
-
-function copyResult(){
-
-navigator.clipboard.writeText(
-document.getElementById("result").value
-);
-
-alert("コピーしました");
+    reader.readAsDataURL(file);
 
 }
 

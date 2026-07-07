@@ -48,3 +48,4 @@ scanButton.addEventListener("click", () => {
     scanQRCode(preview);
 
 });
+// test

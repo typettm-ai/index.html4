@@ -1,32 +1,20 @@
-// CarQR β v0.2.1
-// QRコード読取
+async function scanQRCode(image){
 
-async function scanQRCode(imageElement) {
+    const result=document.getElementById("result");
 
-    const resultDiv = document.getElementById("result");
+    result.innerHTML="🖼️ 画像を解析しています...";
 
-    resultDiv.innerHTML = "🔍 QRコードを解析しています...";
+    const canvas=createCanvasFromImage(image);
 
-    try {
+    const info=getImageInfo(image);
 
-        const reader = new ZXing.BrowserQRCodeReader();
+    result.innerHTML=`
+        <h3>画像情報</h3>
 
-        const result = await reader.decodeFromImageElement(imageElement);
+        幅：${info.width}px<br>
+        高さ：${info.height}px<br><br>
 
-        resultDiv.innerHTML = `
-            <h3>✅ QRコード読取成功</h3>
-            <textarea style="width:100%;height:180px;">${result.text}</textarea>
-        `;
-
-    } catch (error) {
-
-        resultDiv.innerHTML = `
-            <h3>❌ QRコードが見つかりません</h3>
-            <p>画像を確認してください。</p>
-        `;
-
-        console.error(error);
-
-    }
+        ✅ Canvas生成成功
+    `;
 
 }

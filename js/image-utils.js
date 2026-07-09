@@ -2,8 +2,8 @@
 
 function createCanvasFromImage(image){
 
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+    const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
     canvas.width = image.naturalWidth;
     canvas.height = image.naturalHeight;

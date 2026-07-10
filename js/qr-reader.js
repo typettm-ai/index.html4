@@ -1,4 +1,4 @@
-// CarQR β v0.2.4
+// CarQR β v0.2.5
 // qr-reader.js
 
 async function scanQRCode() {
@@ -12,14 +12,19 @@ async function scanQRCode() {
 
     try {
 
-        console.log("ZXing =", ZXing);
-console.log("Canvasサイズ =", canvas.width, canvas.height);
+        const luminanceSource =
+            new ZXing.HTMLCanvasElementLuminanceSource(canvas);
 
-        const codeReader = new ZXing.BrowserQRCodeReader();
+        const binaryBitmap =
+            new ZXing.BinaryBitmap(
+                new ZXing.HybridBinarizer(luminanceSource)
+            );
 
-        const qrResult = await codeReader.decodeFromCanvas(canvas);
+        const reader = new ZXing.MultiFormatReader();
 
-        const time = Debug.finish();
+        const qrResult = reader.decode(binaryBitmap);
+
+                const time = Debug.finish();
 
         Debug.show({
             width: canvas.width,
@@ -29,7 +34,7 @@ console.log("Canvasサイズ =", canvas.width, canvas.height);
             message: `
                 <hr>
                 <b>✅ QRコード読取成功</b><br><br>
-                ${qrResult.text}
+                ${qrResult.getText()}
             `
         });
 

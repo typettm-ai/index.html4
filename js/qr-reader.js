@@ -1,7 +1,9 @@
-// CarQR β v0.2.5
-// qr-reader.js
-
 async function scanQRCode() {
+
+    // OpenCVは後で導入する
+    // if (!checkOpenCV()) {
+    //     return;
+    // }
 
     const result = document.getElementById("result");
     const canvas = document.getElementById("canvas");
@@ -24,7 +26,7 @@ async function scanQRCode() {
 
         const qrResult = reader.decode(binaryBitmap);
 
-                const time = Debug.finish();
+        const time = Debug.finish();
 
         Debug.show({
             width: canvas.width,
@@ -38,7 +40,7 @@ async function scanQRCode() {
             `
         });
 
-       } catch (error) {
+    } catch (error) {
 
         console.error(error);
 

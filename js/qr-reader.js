@@ -12,6 +12,9 @@ async function scanQRCode() {
 
     try {
 
+        console.log("ZXing =", ZXing);
+console.log("Canvasサイズ =", canvas.width, canvas.height);
+
         const codeReader = new ZXing.BrowserQRCodeReader();
 
         const qrResult = await codeReader.decodeFromCanvas(canvas);
@@ -30,7 +33,9 @@ async function scanQRCode() {
             `
         });
 
-    } catch (error) {
+       } catch (error) {
+
+        console.error(error);
 
         const time = Debug.finish();
 
@@ -41,11 +46,10 @@ async function scanQRCode() {
             time: time,
             message: `
                 <hr>
-                ❌ QRコードは見つかりませんでした
+                ❌ QRコードは見つかりませんでした<br><br>
+                <pre>${error}</pre>
             `
         });
-
-        console.log(error);
 
     }
 

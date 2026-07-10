@@ -20,12 +20,20 @@ fileInput.addEventListener("change", (e) => {
 
         preview.src = event.target.result;
 
-        preview.onload = function() {
+        preview.onload = function () {
 
-            result.innerHTML =
-                "✅ 画像を読み込みました。<br>「解析開始」を押してください。";
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
 
-        };
+    canvas.width = preview.naturalWidth;
+    canvas.height = preview.naturalHeight;
+
+    ctx.drawImage(preview, 0, 0);
+
+    result.innerHTML =
+        "✅ 画像を読み込みました。<br>「解析開始」を押してください。";
+
+};
 
     };
 

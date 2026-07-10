@@ -53,6 +53,6 @@ scanButton.addEventListener("click", () => {
 
     result.innerHTML = "🔍 QRコードを解析中...";
 
-    scanQRCode(preview);
+    scanQRCode();
 
 });

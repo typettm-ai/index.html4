@@ -1,20 +1,52 @@
-async function scanQRCode(image){
+// CarQR β v0.2.4
+// qr-reader.js
 
-    const result=document.getElementById("result");
+async function scanQRCode() {
 
-    result.innerHTML="🖼️ 画像を解析しています...";
+    const result = document.getElementById("result");
+    const canvas = document.getElementById("canvas");
 
-    const canvas=createCanvasFromImage(image);
+    Debug.start();
 
-    const info=getImageInfo(image);
+    result.innerHTML = "🔍 QRコードを解析しています...";
 
-    result.innerHTML=`
-        <h3>画像情報</h3>
+    try {
 
-        幅：${info.width}px<br>
-        高さ：${info.height}px<br><br>
+        const codeReader = new ZXing.BrowserQRCodeReader();
 
-        ✅ Canvas生成成功
-    `;
+        const qrResult = await codeReader.decodeFromCanvas(canvas);
+
+        const time = Debug.finish();
+
+        Debug.show({
+            width: canvas.width,
+            height: canvas.height,
+            qrCount: 1,
+            time: time,
+            message: `
+                <hr>
+                <b>✅ QRコード読取成功</b><br><br>
+                ${qrResult.text}
+            `
+        });
+
+    } catch (error) {
+
+        const time = Debug.finish();
+
+        Debug.show({
+            width: canvas.width,
+            height: canvas.height,
+            qrCount: 0,
+            time: time,
+            message: `
+                <hr>
+                ❌ QRコードは見つかりませんでした
+            `
+        });
+
+        console.log(error);
+
+    }
 
 }

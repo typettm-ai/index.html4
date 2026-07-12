@@ -6,11 +6,19 @@ async function scanQRCode() {
     // }
 
     const result = document.getElementById("result");
-    const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("canvas");
 
-    Debug.start();
+const analysis = startAnalysis(canvas);
+
+console.log(analysis);
+
+Debug.start();
 
     result.innerHTML = "🔍 QRコードを解析しています...";
+
+    console.log("ZXing =", ZXing);
+
+    console.log(Object.keys(ZXing));
 
     try {
 

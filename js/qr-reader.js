@@ -22,50 +22,42 @@ Debug.start();
 
     try {
 
-        const luminanceSource =
-            new ZXing.HTMLCanvasElementLuminanceSource(canvas);
+    const codeReader = new ZXing.BrowserQRCodeReader();
 
-        const binaryBitmap =
-            new ZXing.BinaryBitmap(
-                new ZXing.HybridBinarizer(luminanceSource)
-            );
+    const qrResult = await codeReader.decodeFromCanvas(canvas);
 
-        const reader = new ZXing.MultiFormatReader();
+    const time = Debug.finish();
 
-        const qrResult = reader.decode(binaryBitmap);
+    Debug.show({
+        width: canvas.width,
+        height: canvas.height,
+        qrCount: 1,
+        time: time,
+        message: `
+            <hr>
+            <b>✅ QRコード読取成功</b><br><br>
+            ${qrResult.text}
+        `
+    });
 
-        const time = Debug.finish();
+} catch (error) {
 
-        Debug.show({
-            width: canvas.width,
-            height: canvas.height,
-            qrCount: 1,
-            time: time,
-            message: `
-                <hr>
-                <b>✅ QRコード読取成功</b><br><br>
-                ${qrResult.getText()}
-            `
-        });
+    console.error(error);
 
-    } catch (error) {
+    const time = Debug.finish();
 
-        console.error(error);
+    Debug.show({
+        width: canvas.width,
+        height: canvas.height,
+        qrCount: 0,
+        time: time,
+        message: `
+            <hr>
+            ❌ QRコードは見つかりませんでした<br><br>
+            <pre>${error}</pre>
+        `
+    });
 
-        const time = Debug.finish();
-
-        Debug.show({
-            width: canvas.width,
-            height: canvas.height,
-            qrCount: 0,
-            time: time,
-            message: `
-                <hr>
-                ❌ QRコードは見つかりませんでした<br><br>
-                <pre>${error}</pre>
-            `
-        });
-
-    }
+}
 
 }

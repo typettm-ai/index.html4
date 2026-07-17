@@ -5,7 +5,7 @@ async function scanQRCode() {
     //     return;
     // }
 
-    const result = document.getElementById("result");
+const result = document.getElementById("result");
 const canvas = document.getElementById("canvas");
 
 const analysis = startAnalysis(canvas);
